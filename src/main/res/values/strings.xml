@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Slide</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_app_select">Select App</string>
+    <string name="title_activity_launch_app_shortcut">Launch App</string>
+
+</resources>
