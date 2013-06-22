@@ -36,6 +36,13 @@ public class SlidePreferences {
         saveSharedApp(context, appToSave.packageName, appToSave.activityName);
     }
 
+    public static void clearPreference(final Context context) {
+        final SharedPreferences sharedPreferences = context.getSharedPreferences(SLIDE_PREFERENCES, Context.MODE_PRIVATE);
+        sharedPreferences.edit()
+                .clear()
+                .commit();
+    }
+
     public static class App {
         private final String packageName;
         private final String activityName;

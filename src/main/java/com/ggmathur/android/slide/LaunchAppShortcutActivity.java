@@ -2,6 +2,8 @@ package com.ggmathur.android.slide;
 
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.app.Activity;
 
@@ -14,12 +16,16 @@ public class LaunchAppShortcutActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         final SlidePreferences.App appToLoad = SlidePreferences.getSavedApp(this);
-        if (appToLoad == null) {
-            final Intent intent = new Intent(this, AppSelectActivity.class);
-            startActivityForResult(intent, APP_SELECT_REQUEST_CODE);
-        } else {
-            startApp(appToLoad);
+        if (appToLoad != null) {
+            if (isAppInstalled(appToLoad)) {
+                startApp(appToLoad);
+                return;
+            } else {
+                SlidePreferences.clearPreference(this);
+            }
         }
+        final Intent intent = new Intent(this, AppSelectActivity.class);
+        startActivityForResult(intent, APP_SELECT_REQUEST_CODE);
     }
 
     @Override
@@ -36,6 +42,16 @@ public class LaunchAppShortcutActivity extends Activity {
         } else {
             finish();
         }
+    }
+
+    private boolean isAppInstalled(final SlidePreferences.App app) {
+        final PackageManager packageManager = getPackageManager();
+        try {
+            packageManager.getPackageInfo(app.getPackageName(), PackageManager.GET_META_DATA);
+        } catch (final PackageManager.NameNotFoundException e) {
+            return false;
+        }
+        return true;
     }
 
     private void startApp(final SlidePreferences.App appToLoad) {
